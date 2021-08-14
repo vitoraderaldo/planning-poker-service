@@ -1,7 +1,7 @@
 import { Body, Controller, Get, NotFoundException, Param, Patch, Post, UseGuards } from '@nestjs/common';
-import { Serialize } from 'src/interceptors/serialize.interceptor';
-import { MongoId } from 'src/pipes/mongo-id.pipe';
-import { CurrentUser } from 'src/user/decotators/current-user.decorator';
+import { Serialize } from '../interceptors/serialize.interceptor';
+import { MongoId } from '../pipes/mongo-id.pipe';
+import { CurrentUser } from '../user/decotators/current-user.decorator';
 import { UserGuard } from '../guards/user.guard';
 import { CreatePlanningDto } from './dto/create-planning.dto';
 import { ViewPlanningDto } from './dto/view-planning.dto';
@@ -20,7 +20,7 @@ export class PlanningController {
 
     @Get(':id')
     get(@Param('id', new MongoId()) id: string) {
-        const planning = this.planningService.getAndPópulate(id)
+        const planning = this.planningService.getAndPopulate(id)
         if (!planning) {
             throw new NotFoundException('Planning not found')
         }

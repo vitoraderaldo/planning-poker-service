@@ -18,7 +18,7 @@ export class PlanningService {
         return this.planningModel.findById(id)
     }
 
-    getAndPópulate(id: string) {
+    getAndPopulate(id: string) {
         return this.get(id).populate('createdBy voters.user')
     }
 

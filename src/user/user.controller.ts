@@ -1,5 +1,5 @@
 import { Body, Controller, Post, Session, UseGuards } from '@nestjs/common';
-import { Serialize } from 'src/interceptors/serialize.interceptor';
+import { Serialize } from '../interceptors/serialize.interceptor';
 import { AnonymousGuard } from '../guards/anonymous.guard';
 import { CreateUserDto } from './dto/create-user.dto';
 import { ViewUserDto } from './dto/view-user.dto';

@@ -31,4 +31,4 @@ export class Planning extends Document {
 }
 
 export const PlanningSchema = SchemaFactory.createForClass(Planning)
-export type PlanningDocument = Planning;
+export type PlanningDocument = Planning & Document;

@@ -1,7 +1,7 @@
 import { Injectable, NestMiddleware } from "@nestjs/common"
 import { UserService } from "../user.service"
 import { Request, Response, NextFunction } from "express";
-import { UserDocument } from "src/user/schemas/user.schema";
+import { UserDocument } from "../../user/schemas/user.schema";
 
 declare global {
     namespace Express {
