@@ -3,13 +3,13 @@ import * as mongoose from 'mongoose';
 import { Document } from 'mongoose';
 
 @Schema({timestamps: true})
-export class Voter extends Document {   
+export class Voter extends Document {
 
     @Prop({required: true, type: mongoose.Schema.Types.ObjectId, ref: 'User'})
     user: string
 
     @Prop({required: true, type: Number})
-    value: Number   
+    value: Number
 }
 
 const VoterSchema = SchemaFactory.createForClass(Voter)
@@ -27,7 +27,7 @@ export class Planning extends Document {
     revelead: boolean
 
     @Prop({type: [VoterSchema], default:[]})
-    voters: Voter[]   
+    voters: Voter[]
 }
 
 export const PlanningSchema = SchemaFactory.createForClass(Planning)

@@ -10,13 +10,13 @@ describe('UserController', () => {
   let userService: Partial<UserService>
 
   const user = {
-    _id: 1, 
+    _id: 1,
     name: 'Vitor'
   }
 
   beforeEach(async () => {
 
-    userService = {      
+    userService = {
       create: () => Promise.resolve(user as UserDocument)
     }
 
@@ -36,9 +36,9 @@ describe('UserController', () => {
   });
 
   it('Must create a session during user creation', async () => {
-    const session = {userId: null}  
+    const session = {userId: null}
     await controller.create(session, {} as CreateUserDto)
     expect(session.userId).toBe(user._id)
   })
-  
+
 });

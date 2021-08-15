@@ -1,4 +1,4 @@
-export class VoterDto {  
+export class VoterDto {
 
     constructor(voter: VoterDto) {
         Object.assign(this, voter)
@@ -6,5 +6,5 @@ export class VoterDto {
 
     planningId: string
     userId: string
-    value: number    
+    value: number
 }

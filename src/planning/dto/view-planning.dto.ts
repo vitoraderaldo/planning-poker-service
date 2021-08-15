@@ -11,17 +11,17 @@ class User {
 }
 
 class Voter {
-    @Expose()    
+    @Expose()
     user: User
 
     @Expose()
-    value: number    
+    value: number
 
     @Expose()
     createdAt: Date
 
     @Expose()
-    updatedAt: Date    
+    updatedAt: Date
 }
 
 export class ViewPlanningDto {
@@ -44,7 +44,7 @@ export class ViewPlanningDto {
 
     @Expose()
     updatedAt: Date
-    
+
     @Expose()
     voters: Voter
 }

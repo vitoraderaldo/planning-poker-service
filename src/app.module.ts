@@ -9,10 +9,10 @@ const cookieSession = require('cookie-session');
 
 @Module({
   imports: [
-    PlanningModule, 
+    PlanningModule,
     UserModule,
     MongooseModule.forRoot(`mongodb://${process.env.MONGO_HOST}:${process.env.MONGO_PORT}`, {
-      user: process.env.MONGO_USER, 
+      user: process.env.MONGO_USER,
       pass: process.env.MONGO_PASSWORD,
       dbName: process.env.MONGO_DATABASE
     })
@@ -31,14 +31,14 @@ const cookieSession = require('cookie-session');
 export class AppModule {
 
   configure(consumer: MiddlewareConsumer) {
-    
+
     consumer.apply(
       cookieSession({
         keys: [process.env.COOKIE_KEY]
       })
     ).forRoutes('*')
 
-    
+
 
   }
 }
