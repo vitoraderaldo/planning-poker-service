@@ -13,14 +13,14 @@ import { PlanningService } from './planning.service';
 @UseGuards(UserGuard)
 @Controller('planning')
 export class PlanningController {
-    
+
     constructor(
         private planningService: PlanningService
     ) {}
 
     @Get(':id')
     get(@Param('id', new MongoId()) id: string) {
-        const planning = this.planningService.getAndPopulate(id)
+        const planning = this.planningService.get(id, true)
         if (!planning) {
             throw new NotFoundException('Planning not found')
         }
@@ -30,15 +30,16 @@ export class PlanningController {
     @Patch(':id')
     async vote(@CurrentUser() currentUser: any, @Param('id', new MongoId()) id: string, @Body() body: VotePlanningDto) {
         const voterDto = new VoterDto({
-            planningId: id, 
-            userId: currentUser._id, 
+            planningId: id,
+            userId: currentUser._id,
             value: body.value
         })
-        return await this.planningService.addVoteAndPopulate(voterDto)
+        return await this.planningService.addVote(voterDto)
     }
 
     @Post()
-    async create(@CurrentUser() currentUser: any, @Body() body: CreatePlanningDto) {      
-        return await this.planningService.createAndPopulate(currentUser._id, body)
-    }  
+    async create(@CurrentUser() currentUser: any, @Body() body: CreatePlanningDto) {
+        body.userId = currentUser._id
+        return await this.planningService.create(body, true)
+    }
 }

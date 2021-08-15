@@ -12,9 +12,9 @@ export class UserController {
 
     constructor(
         private userService: UserService
-    ) {}    
-    
-    @Post()    
+    ) {}
+
+    @Post()
     async create(@Session() session: any, @Body() body: CreateUserDto) {
         const user = await this.userService.create(body)
         if (user?._id) {

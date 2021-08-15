@@ -5,4 +5,6 @@ export class CreatePlanningDto {
     @IsNotEmpty()
     @IsString()
     name: string
+
+    userId: string
 }
