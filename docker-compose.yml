@@ -1,22 +1,5 @@
 version: '3'
 services:
-  poker-service:
-    build: 
-      context: .
-      dockerfile: Dockerfile.dev
-    ports:
-      - "3000:3000"      
-    volumes:
-      - /app/node_modules
-      - .:/app
-    environment:      
-      - COOKIE_KEY=key
-      - MONGO_HOST=mongo
-      - MONGO_PORT=27017
-      - MONGO_USER=user
-      - MONGO_PASSWORD=password
-      - MONGO_DATABASE=planning-poker
-
   mongo:
     image: 'mongo'
     environment:
@@ -27,8 +10,17 @@ services:
       - /planning-poker/mongo:/data/db
     ports:
       - '27017:27017'
-  
+
   sonarqube:
     ports:
       - "9000:9000"
     image: sonarqube:8.3-community
+
+  mongo-test:
+    image: 'mongo'
+    environment:
+      - MONGO_INITDB_DATABASE=planning-poker-test
+      - MONGO_INITDB_ROOT_USERNAME=user
+      - MONGO_INITDB_ROOT_PASSWORD=password
+    ports:
+      - "27018:27017"
