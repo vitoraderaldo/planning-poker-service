@@ -52,6 +52,7 @@ $ npm run start:prod
 $ npm run test
 
 # e2e tests
+$ docker-compose up mongo-test
 $ npm run test:e2e
 
 # test coverage
