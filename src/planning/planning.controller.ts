@@ -19,8 +19,8 @@ export class PlanningController {
     ) {}
 
     @Get(':id')
-    get(@Param('id', new MongoId()) id: string) {
-        const planning = this.planningService.get(id, true)
+    async get(@Param('id', new MongoId()) id: string) {
+        const planning = await this.planningService.get(id, true)
         if (!planning) {
             throw new NotFoundException('Planning not found')
         }

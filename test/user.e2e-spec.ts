@@ -4,6 +4,7 @@ import { AppModule } from './../src/app.module';
 import { Connection } from 'mongoose';
 import { getConnectionToken } from '@nestjs/mongoose';
 import {createUser, createUserDto} from './Util-spec'
+import { ViewUserDto } from 'src/user/dto/view-user.dto';
 
 describe('User', () => {
   let app: INestApplication;
@@ -25,12 +26,12 @@ describe('User', () => {
     await connection.close(true);
   });
 
-  it('Create User)', async () => {
+  it('Create User', async () => {
     await createUser(app, createUserDto)
       .expect(201)
       .then((res) => {
-        const {id, name} = res.body
-        const fields = Object.keys(res.body)
+        const {id, name}: ViewUserDto = res.body
+        const fields: string[] = Object.keys(res.body)
         expect(fields).toStrictEqual(['id', 'name'])
         expect(id).toBeDefined()
         expect(name).toEqual(createUserDto.name)

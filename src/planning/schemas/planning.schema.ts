@@ -9,7 +9,7 @@ export class Voter extends Document {
     user: string
 
     @Prop({required: true, type: Number})
-    value: Number
+    value: number
 }
 
 const VoterSchema = SchemaFactory.createForClass(Voter)

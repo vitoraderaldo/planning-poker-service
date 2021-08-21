@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserRepository } from './repositories/user.repository';
+import { UserDocument } from './schemas/user.schema';
 
 @Injectable()
 export class UserService {
@@ -9,7 +10,7 @@ export class UserService {
         private userRepository: UserRepository
     ) {}
 
-    get(id: string) {
+    async get(id: string): Promise<UserDocument> {
         return this.userRepository.get(id)
     }
 

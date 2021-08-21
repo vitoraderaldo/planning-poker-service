@@ -20,7 +20,7 @@ describe('PlanningController', () => {
   beforeEach(async () => {
 
     planningService = {
-      get: (id: string): any => savedPlanning,
+      get: (id: string): any =>  Promise.resolve(savedPlanning),
       create: async (planningDto: CreatePlanningDto) => Promise.resolve({} as PlanningDocument),
       addVote: async (voterDto: VoterDto) => Promise.resolve({} as PlanningDocument)
     }
@@ -42,15 +42,15 @@ describe('PlanningController', () => {
     expect(controller).toBeDefined();
   });
 
-  it('Must return planning by id', () => {
-    const plan = controller.get('any id')
+  it('Must return planning by id', async () => {
+    const plan = await controller.get('any id')
     expect(plan).toBe(savedPlanning)
   })
 
-  it('Must throw exception when does planning was not found', () => {
-    planningService.get = () => null
+  it('Must throw exception when does planning was not found', async () => {
+    planningService.get = async () => Promise.resolve(null)
     try {
-      controller.get('any id')
+      await controller.get('any id')
       throw new Error("Exception was not thrown")
     } catch (err) {
       expect(err).toBeInstanceOf(NotFoundException)

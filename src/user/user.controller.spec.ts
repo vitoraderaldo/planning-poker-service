@@ -1,5 +1,4 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { Request } from 'express';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserDocument } from './schemas/user.schema';
 import { UserController } from './user.controller';

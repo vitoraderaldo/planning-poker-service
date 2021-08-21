@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreatePlanningDto } from './dto/create-planning.dto';
-import { Planning } from './schemas/planning.schema';
+import { PlanningDocument } from './schemas/planning.schema';
 import { VoterDto } from './dto/voter.dto';
 import { PlanningRepository } from './repositories/planning.repository';
 
@@ -13,10 +13,10 @@ export class PlanningService {
         private planningRepository: PlanningRepository
     ) {}
 
-    async get(id: string, populate: boolean = false) {
+    async get(id: string, populate: boolean = false): Promise<PlanningDocument> {
         let planning = await this.planningRepository.get(id)
         if (planning && populate) {
-            return this.planningRepository.populate(planning)
+            return await this.planningRepository.populate(planning)
         }
         return planning
     }
@@ -45,7 +45,7 @@ export class PlanningService {
         return this.planningRepository.populate(planning)
     }
 
-    private revote(planning: Planning, voterDto: VoterDto) {
+    private revote(planning: PlanningDocument, voterDto: VoterDto) {
         let userLastVote = planning.voters.find(voter => voter.user.toString() == voterDto.userId);
         if (userLastVote) {
             userLastVote.value = voterDto.value
@@ -54,7 +54,7 @@ export class PlanningService {
         return null
     }
 
-    private newVote(planning: Planning, voterDto: VoterDto) {
+    private newVote(planning: PlanningDocument, voterDto: VoterDto) {
         if (planning.voters.length >= this.MAX_VOTERS) {
             throw new BadRequestException('This planning has reached out the limit of voters')
         }

@@ -19,7 +19,7 @@ export class PlanningRepository {
         })
     }
 
-    get(id: string) {
+    async get(id: string): Promise<PlanningDocument> {
         return this.planningModel.findById(id)
     }
 
