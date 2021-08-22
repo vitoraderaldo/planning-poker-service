@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreatePlanningDto } from './dto/create-planning.dto';
 import { PlanningDocument } from './schemas/planning.schema';
 import { VoterDto } from './dto/voter.dto';
@@ -43,6 +43,21 @@ export class PlanningService {
             planning = await this.planningRepository.save(newVote)
         }
         return this.planningRepository.populate(planning)
+    }
+
+    async reveal(planningId: string, requestBy: string) {
+        let planning = await this.get(planningId)
+        if (!planning) {
+            throw new NotFoundException('Planning not found')
+        }
+        if (planning.createdBy.toString() != requestBy.toString()) {
+            throw new ForbiddenException('Only the creator can reveal the results')
+        }
+        if (!planning.revelead) {
+            planning.revelead = true
+            planning = await this.planningRepository.save(planning)
+        }
+        return await this.planningRepository.populate(planning)
     }
 
     private revote(planning: PlanningDocument, voterDto: VoterDto) {

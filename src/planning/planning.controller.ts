@@ -1,4 +1,4 @@
-import { Body, Controller, Get, NotFoundException, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, ForbiddenException, Get, NotFoundException, Param, Patch, Post, UseGuards } from '@nestjs/common';
 import { Serialize } from '../interceptors/serialize.interceptor';
 import { MongoId } from '../pipes/mongo-id.pipe';
 import { CurrentUser } from '../user/decotators/current-user.decorator';
@@ -32,7 +32,7 @@ export class PlanningController {
         return planning
     }
 
-    @Patch(':id')
+    @Patch('vote/:id')
     @ApiOkResponse({description: 'The vote has been successfully computed.', type: ViewPlanningDto})
     @ApiForbiddenResponse({description: 'Only users can vote on a planning.'})
     @ApiNotFoundResponse({description: 'Planning was not found'})
@@ -44,6 +44,14 @@ export class PlanningController {
             value: body.value
         })
         return await this.planningService.addVote(voterDto)
+    }
+
+    @Patch('reveal/:id')
+    @ApiOkResponse({description: 'The planning has been successfully revelead.', type: ViewPlanningDto})
+    @ApiForbiddenResponse({description: 'Only the creator can reveal the results.'})
+    @ApiNotFoundResponse({description: 'Planning was not found'})
+    async reveal(@CurrentUser() currentUser: any, @Param('id', new MongoId()) id: string) {
+       return await this.planningService.reveal(id, currentUser._id)
     }
 
     @Post()

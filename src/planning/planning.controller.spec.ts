@@ -47,7 +47,7 @@ describe('PlanningController', () => {
     expect(plan).toBe(savedPlanning)
   })
 
-  it('Must throw exception when does planning was not found', async () => {
+  it('Must throw exception when planning does not exist', async () => {
     planningService.get = async () => Promise.resolve(null)
     try {
       await controller.get('any id')

@@ -3,7 +3,7 @@ import { INestApplication } from '@nestjs/common';
 import { AppModule } from '../src/app.module';
 import { Connection } from 'mongoose';
 import { getConnectionToken } from '@nestjs/mongoose';
-import {createUser, createPlanning, voteOnPlanning, createUserDto, getUserFromCookie} from './Util-spec'
+import {createUser, createPlanning, voteOnPlanning, createUserDto, getUserFromCookie, revealPlanning} from './Util-spec'
 import { CreatePlanningDto } from '../src/planning/dto/create-planning.dto';
 var mongoose = require('mongoose');
 
@@ -65,16 +65,19 @@ describe('Vote Planning', () => {
     const cookieUser = getUserFromCookie(cookie)
     const initialPlanning = (await (createPlanning(app, planning).set('Cookie', cookie))).body
 
-    const request = await voteOnPlanning(app, initialPlanning.id, {value: 3})
-        .set('Cookie', cookie)
-        .expect(200)
+    await voteOnPlanning(app, initialPlanning.id, {value: 3})
+      .set('Cookie', cookie)
+      .expect(200)
+
+    const request = await revealPlanning(app, initialPlanning.id)
+      .set('Cookie', cookie)
+      .expect(200)
 
     const finalPlanning = request.body
     const votedUser = finalPlanning.voters[0]
 
     expect(initialPlanning.id).toBe(finalPlanning.id)
     expect(initialPlanning.name).toBe(finalPlanning.name)
-    expect(initialPlanning.revelead).toBe(finalPlanning.revelead)
     expect(initialPlanning.createdBy.id).toBe(finalPlanning.createdBy.id)
     expect(initialPlanning.createdBy.name).toBe(finalPlanning.createdBy.name)
     expect(initialPlanning.createdAt).toBe(finalPlanning.createdAt)
@@ -91,19 +94,22 @@ describe('Vote Planning', () => {
     const cookieUser = getUserFromCookie(cookie)
     const initialPlanning = (await (createPlanning(app, planning).set('Cookie', cookie))).body
     await voteOnPlanning(app, initialPlanning.id, {value: 3}).set('Cookie', cookie)
-    const request = await voteOnPlanning(app, initialPlanning.id, {value: 5})
+    await voteOnPlanning(app, initialPlanning.id, {value: 5})
       .set('Cookie', cookie)
+
+    const request = await revealPlanning(app, initialPlanning.id)
+      .set('Cookie', cookie)
+      .expect(200)
 
     const finalPlanning = request.body
     const votedUser = finalPlanning.voters[0]
 
-    expect(initialPlanning.id).toBe(finalPlanning.id)
-    expect(initialPlanning.name).toBe(finalPlanning.name)
-    expect(initialPlanning.revelead).toBe(finalPlanning.revelead)
-    expect(initialPlanning.createdBy.id).toBe(finalPlanning.createdBy.id)
-    expect(initialPlanning.createdBy.name).toBe(finalPlanning.createdBy.name)
-    expect(initialPlanning.createdAt).toBe(finalPlanning.createdAt)
-    expect(Date.parse(initialPlanning.updatedAt)).toBeLessThan(Date.parse(finalPlanning.updatedAt))
+    expect(finalPlanning.id).toBe(initialPlanning.id)
+    expect(finalPlanning.name).toBe(initialPlanning.name)
+    expect(finalPlanning.createdBy.id).toBe(initialPlanning.createdBy.id)
+    expect(finalPlanning.createdBy.name).toBe(initialPlanning.createdBy.name)
+    expect(finalPlanning.createdAt).toBe(initialPlanning.createdAt)
+    expect(Date.parse(finalPlanning.updatedAt)).toBeGreaterThan(Date.parse(initialPlanning.updatedAt))
     expect(Date.parse(finalPlanning.createdAt)).toBeLessThan(Date.parse(finalPlanning.updatedAt))
     expect(finalPlanning.voters.length).toBe(1)
     expect(votedUser.value).toBe(5)

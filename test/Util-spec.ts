@@ -28,8 +28,13 @@ export const createPlanning = (app: INestApplication, planning: CreatePlanningDt
 
 export const voteOnPlanning = (app: INestApplication, planningId: string, vote: VotePlanningDto) => {
     return request(app.getHttpServer())
-      .patch(`/planning/${planningId}`)
+      .patch(`/planning/vote/${planningId}`)
       .send(vote)
+}
+
+export const revealPlanning = (app: INestApplication, planningId: string) => {
+  return request(app.getHttpServer())
+    .patch(`/planning/reveal/${planningId}`)
 }
 
 export const getPlanning = (app: INestApplication, planningId: string) => {

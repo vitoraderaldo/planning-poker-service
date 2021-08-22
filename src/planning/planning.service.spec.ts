@@ -4,7 +4,7 @@ import { PlanningService } from './planning.service';
 import { PlanningRepository } from './repositories/planning.repository';
 import { Types } from 'mongoose';
 import { VoterDto } from './dto/voter.dto';
-import { BadRequestException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException } from '@nestjs/common';
 
 const Mock = jest.fn
 
@@ -157,4 +157,22 @@ describe('PlanningService', () => {
       }
     }
   })
+
+  it('Must be able to reveal the votes', async () => {
+    const planning = await service.reveal(savedPlanning._id, savedPlanning.createdBy)
+    expect(planning.revelead).toBe(true)
+  })
+
+  it('Non creators must not reveal the results', async () => {
+    try {
+      const planning = await service.reveal(savedPlanning._id, 'random_user_id')
+    } catch (err) {
+      if (err instanceof ForbiddenException) {
+        expect(err.message).toBe('Only the creator can reveal the results')
+      } else {
+        throw err
+      }
+    }
+  })
+
 });
