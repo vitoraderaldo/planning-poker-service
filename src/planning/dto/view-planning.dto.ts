@@ -1,4 +1,4 @@
-import { Expose, Transform } from "class-transformer";
+import { Expose, Transform, Type } from "class-transformer";
 import { ApiProperty } from '@nestjs/swagger';
 
 class User {
@@ -60,5 +60,6 @@ export class ViewPlanningDto {
 
     @ApiProperty({type: [Voter]})
     @Expose()
-    voters: Voter
+    @Type(() => Voter)
+    voters: Voter[]
 }

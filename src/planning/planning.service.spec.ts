@@ -158,6 +158,24 @@ describe('PlanningService', () => {
     }
   })
 
+  it('Must not vote when the planning is revelead', async () => {
+    let voter = new VoterDto({
+      planningId: savedPlanning._id,
+      userId: '',
+      value: 3
+    })
+    savedPlanning.revelead = true
+    try {
+      await service.addVote(voter)
+    } catch (err) {
+      if (err instanceof BadRequestException) {
+        expect(err.message).toBe('Cannot vote on a planning that is already revelead')
+      } else {
+        throw err
+      }
+    }
+  })
+
   it('Must be able to reveal the votes', async () => {
     const planning = await service.reveal(savedPlanning._id, savedPlanning.createdBy)
     expect(planning.revelead).toBe(true)

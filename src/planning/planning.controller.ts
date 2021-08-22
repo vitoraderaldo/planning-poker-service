@@ -1,4 +1,4 @@
-import { Body, Controller, ForbiddenException, Get, NotFoundException, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, NotFoundException, Param, Patch, Post, UseGuards, UseInterceptors } from '@nestjs/common';
 import { Serialize } from '../interceptors/serialize.interceptor';
 import { MongoId } from '../pipes/mongo-id.pipe';
 import { CurrentUser } from '../user/decotators/current-user.decorator';
@@ -9,7 +9,9 @@ import { VotePlanningDto } from './dto/vote-planning.dto';
 import { VoterDto } from './dto/voter.dto';
 import { PlanningService } from './planning.service';
 import { ApiTags, ApiOkResponse, ApiForbiddenResponse, ApiBadRequestResponse, ApiNotFoundResponse, ApiCreatedResponse } from '@nestjs/swagger';
+import { VoteInterceptor } from '../interceptors/vote.interceptor'
 
+@UseInterceptors(new VoteInterceptor())
 @Serialize(ViewPlanningDto)
 @UseGuards(UserGuard)
 @ApiTags('Planning')
@@ -37,6 +39,7 @@ export class PlanningController {
     @ApiForbiddenResponse({description: 'Only users can vote on a planning.'})
     @ApiNotFoundResponse({description: 'Planning was not found'})
     @ApiBadRequestResponse({description: 'Invalid payload'})
+    @ApiBadRequestResponse({description: 'Cannot vote on a planning that is already revelead'})
     async vote(@CurrentUser() currentUser: any, @Param('id', new MongoId()) id: string, @Body() body: VotePlanningDto) {
         const voterDto = new VoterDto({
             planningId: id,

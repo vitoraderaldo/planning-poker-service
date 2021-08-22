@@ -3,7 +3,7 @@ import { INestApplication } from '@nestjs/common';
 import { AppModule } from '../src/app.module';
 import { Connection } from 'mongoose';
 import { getConnectionToken } from '@nestjs/mongoose';
-import {createUser, createPlanning, voteOnPlanning, createUserDto, getUserFromCookie, revealPlanning} from './Util-spec'
+import {createUser, createPlanning, voteOnPlanning, createUserDto, getUserFromCookie} from './Util-spec'
 import { CreatePlanningDto } from '../src/planning/dto/create-planning.dto';
 var mongoose = require('mongoose');
 
@@ -65,11 +65,7 @@ describe('Vote Planning', () => {
     const cookieUser = getUserFromCookie(cookie)
     const initialPlanning = (await (createPlanning(app, planning).set('Cookie', cookie))).body
 
-    await voteOnPlanning(app, initialPlanning.id, {value: 3})
-      .set('Cookie', cookie)
-      .expect(200)
-
-    const request = await revealPlanning(app, initialPlanning.id)
+    const request = await voteOnPlanning(app, initialPlanning.id, {value: 3})
       .set('Cookie', cookie)
       .expect(200)
 
@@ -94,12 +90,8 @@ describe('Vote Planning', () => {
     const cookieUser = getUserFromCookie(cookie)
     const initialPlanning = (await (createPlanning(app, planning).set('Cookie', cookie))).body
     await voteOnPlanning(app, initialPlanning.id, {value: 3}).set('Cookie', cookie)
-    await voteOnPlanning(app, initialPlanning.id, {value: 5})
+    const request = await voteOnPlanning(app, initialPlanning.id, {value: 5})
       .set('Cookie', cookie)
-
-    const request = await revealPlanning(app, initialPlanning.id)
-      .set('Cookie', cookie)
-      .expect(200)
 
     const finalPlanning = request.body
     const votedUser = finalPlanning.voters[0]
@@ -115,7 +107,5 @@ describe('Vote Planning', () => {
     expect(votedUser.value).toBe(5)
     expect(votedUser.user.id).toBe(cookieUser.userId)
   })
-
-
 
 });
