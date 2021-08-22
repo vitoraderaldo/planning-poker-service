@@ -44,7 +44,7 @@ export class ViewPlanningDto {
 
     @ApiProperty()
     @Expose()
-    revelead: boolean
+    revealed: boolean
 
     @ApiProperty()
     @Expose()

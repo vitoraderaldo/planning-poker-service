@@ -21,7 +21,7 @@ describe('PlanningService', () => {
       _id: '611923b4662b0500337df132',
       name: 'TXP-9281',
       createdBy: '4894949849449',
-      revelead: false,
+      revealed: false,
       voters: [],
     }
 
@@ -31,7 +31,7 @@ describe('PlanningService', () => {
           _id: Types.ObjectId(),
           name: planningDto.name,
           createdBy: planningDto.userId,
-          revelead: false,
+          revealed: false,
           voters: []
         } as any
       }),
@@ -158,18 +158,18 @@ describe('PlanningService', () => {
     }
   })
 
-  it('Must not vote when the planning is revelead', async () => {
+  it('Must not vote when the planning is revealed', async () => {
     let voter = new VoterDto({
       planningId: savedPlanning._id,
       userId: '',
       value: 3
     })
-    savedPlanning.revelead = true
+    savedPlanning.revealed = true
     try {
       await service.addVote(voter)
     } catch (err) {
       if (err instanceof BadRequestException) {
-        expect(err.message).toBe('Cannot vote on a planning that is already revelead')
+        expect(err.message).toBe('Cannot vote on a planning that is already revealed')
       } else {
         throw err
       }
@@ -178,7 +178,7 @@ describe('PlanningService', () => {
 
   it('Must be able to reveal the votes', async () => {
     const planning = await service.reveal(savedPlanning._id, savedPlanning.createdBy)
-    expect(planning.revelead).toBe(true)
+    expect(planning.revealed).toBe(true)
   })
 
   it('Non creators must not reveal the results', async () => {

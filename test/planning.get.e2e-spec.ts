@@ -73,7 +73,7 @@ describe('Get Planning', () => {
 
     expect(receivedPlanning.id).toBeDefined()
     expect(receivedPlanning.name).toBe(planning.name)
-    expect(receivedPlanning.revelead).toBeDefined()
+    expect(receivedPlanning.revealed).toBeDefined()
     expect(receivedPlanning.createdBy.id).toBe(cookieUser.userId)
     expect(receivedPlanning.createdBy.name).toBeDefined()
     expect(receivedPlanning.createdAt).toBeDefined()

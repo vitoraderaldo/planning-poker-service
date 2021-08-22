@@ -35,8 +35,8 @@ export class PlanningService {
         if (!planning) {
             throw new NotFoundException('Planning not found')
         }
-        if (planning.revelead) {
-            throw new BadRequestException('Cannot vote on a planning that is already revelead')
+        if (planning.revealed) {
+            throw new BadRequestException('Cannot vote on a planning that is already revealed')
         }
         const revote = this.revote(planning, voterDto)
         if (revote) {
@@ -56,8 +56,8 @@ export class PlanningService {
         if (planning.createdBy.toString() != requestBy.toString()) {
             throw new ForbiddenException('Only the creator can reveal the results')
         }
-        if (!planning.revelead) {
-            planning.revelead = true
+        if (!planning.revealed) {
+            planning.revealed = true
             planning = await this.planningRepository.save(planning)
         }
         return await this.planningRepository.populate(planning)

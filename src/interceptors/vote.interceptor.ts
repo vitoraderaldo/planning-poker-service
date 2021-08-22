@@ -12,7 +12,7 @@ export class VoteInterceptor implements NestInterceptor {
         // Run something before the response is sent out (outgoing)
         return handler.handle().pipe(
             map((planning: any) => {
-                if (!planning.revelead) {
+                if (!planning.revealed) {
                     for (let i = 0; i < planning.voters.length; i++) {
                         if (planning.voters[i].user._id.toString() != userId.toString()) {
                             planning.voters[i].value = null

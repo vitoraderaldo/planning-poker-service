@@ -13,7 +13,7 @@ describe('PlanningController', () => {
   let savedPlanning = {
     name: 'TXP-9281',
     createdBy: '4894949849449',
-    revelead: false,
+    revealed: false,
     voters: []
   } as PlanningDocument
 

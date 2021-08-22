@@ -1,9 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
+import { BadRequestException, ConsoleLogger, INestApplication } from '@nestjs/common';
 import { AppModule } from '../src/app.module';
 import { Connection } from 'mongoose';
 import { getConnectionToken } from '@nestjs/mongoose';
-import {createUser, createPlanning, voteOnPlanning, createUserDto, getUserFromCookie} from './Util-spec'
+import {createUser, createPlanning, voteOnPlanning, createUserDto, getUserFromCookie, revealPlanning} from './Util-spec'
 import { CreatePlanningDto } from '../src/planning/dto/create-planning.dto';
 var mongoose = require('mongoose');
 
@@ -106,6 +106,19 @@ describe('Vote Planning', () => {
     expect(finalPlanning.voters.length).toBe(1)
     expect(votedUser.value).toBe(5)
     expect(votedUser.user.id).toBe(cookieUser.userId)
+  })
+
+  it('Must not vote when the planning is revealed', async () => {
+    const response = await createUser(app, createUserDto)
+    const cookie = response.get('Set-Cookie')
+    const initialPlanning = (await (createPlanning(app, planning).set('Cookie', cookie))).body
+    await voteOnPlanning(app, initialPlanning.id, {value: 3}).set('Cookie', cookie)
+    await revealPlanning(app, initialPlanning.id).set('Cookie', cookie)
+    await voteOnPlanning(app, initialPlanning.id, {value: 5}).set('Cookie', cookie)
+      .expect(400)
+      .then((res) => {
+        expect(res.body.message).toBe('Cannot vote on a planning that is already revealed')
+      })
   })
 
 });

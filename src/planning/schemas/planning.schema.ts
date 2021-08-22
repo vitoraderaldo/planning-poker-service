@@ -24,7 +24,7 @@ export class Planning extends Document {
     createdBy: string
 
     @Prop({type: Boolean, default: false})
-    revelead: boolean
+    revealed: boolean
 
     @Prop({type: [VoterSchema], default:[]})
     voters: Voter[]

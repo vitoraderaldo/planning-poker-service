@@ -52,11 +52,11 @@ describe('Create Planning', () => {
         .expect(201)
         .then((res) => {
             const fields = Object.keys(res.body)
-            const {id, name, revelead, createdBy, createdAt, updatedAt, voters}: ViewPlanningDto = res.body
-            expect(fields).toStrictEqual(['id', 'name', 'revelead', 'createdBy', 'createdAt', 'updatedAt', 'voters'])
+            const {id, name, revealed, createdBy, createdAt, updatedAt, voters}: ViewPlanningDto = res.body
+            expect(fields).toStrictEqual(['id', 'name', 'revealed', 'createdBy', 'createdAt', 'updatedAt', 'voters'])
             expect(id).toBeDefined()
             expect(name).toStrictEqual(planning.name)
-            expect(revelead).toStrictEqual(false)
+            expect(revealed).toStrictEqual(false)
             expect(voters).toStrictEqual([])
             expect(createdAt).toBeDefined()
             expect(updatedAt).toBeDefined()

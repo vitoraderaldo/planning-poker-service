@@ -39,7 +39,7 @@ export class PlanningController {
     @ApiForbiddenResponse({description: 'Only users can vote on a planning.'})
     @ApiNotFoundResponse({description: 'Planning was not found'})
     @ApiBadRequestResponse({description: 'Invalid payload'})
-    @ApiBadRequestResponse({description: 'Cannot vote on a planning that is already revelead'})
+    @ApiBadRequestResponse({description: 'Cannot vote on a planning that is already revealed'})
     async vote(@CurrentUser() currentUser: any, @Param('id', new MongoId()) id: string, @Body() body: VotePlanningDto) {
         const voterDto = new VoterDto({
             planningId: id,
@@ -50,7 +50,7 @@ export class PlanningController {
     }
 
     @Patch('reveal/:id')
-    @ApiOkResponse({description: 'The planning has been successfully revelead.', type: ViewPlanningDto})
+    @ApiOkResponse({description: 'The planning has been successfully revealed.', type: ViewPlanningDto})
     @ApiForbiddenResponse({description: 'Only the creator can reveal the results.'})
     @ApiNotFoundResponse({description: 'Planning was not found'})
     async reveal(@CurrentUser() currentUser: any, @Param('id', new MongoId()) id: string) {
