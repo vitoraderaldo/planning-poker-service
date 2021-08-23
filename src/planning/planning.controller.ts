@@ -10,6 +10,7 @@ import { VoterDto } from './dto/voter.dto';
 import { PlanningService } from './planning.service';
 import { ApiTags, ApiOkResponse, ApiForbiddenResponse, ApiBadRequestResponse, ApiNotFoundResponse, ApiCreatedResponse } from '@nestjs/swagger';
 import { VoteInterceptor } from '../interceptors/vote.interceptor'
+import { UserDocument } from 'src/user/schemas/user.schema';
 
 @UseInterceptors(new VoteInterceptor())
 @Serialize(ViewPlanningDto)
@@ -40,7 +41,7 @@ export class PlanningController {
     @ApiNotFoundResponse({description: 'Planning was not found'})
     @ApiBadRequestResponse({description: 'Invalid payload'})
     @ApiBadRequestResponse({description: 'Cannot vote on a planning that is already revealed'})
-    async vote(@CurrentUser() currentUser: any, @Param('id', new MongoId()) id: string, @Body() body: VotePlanningDto) {
+    async vote(@CurrentUser() currentUser: UserDocument, @Param('id', new MongoId()) id: string, @Body() body: VotePlanningDto) {
         const voterDto = new VoterDto({
             planningId: id,
             userId: currentUser._id,
@@ -53,7 +54,7 @@ export class PlanningController {
     @ApiOkResponse({description: 'The planning has been successfully revealed.', type: ViewPlanningDto})
     @ApiForbiddenResponse({description: 'Only the creator can reveal the results.'})
     @ApiNotFoundResponse({description: 'Planning was not found'})
-    async reveal(@CurrentUser() currentUser: any, @Param('id', new MongoId()) id: string) {
+    async reveal(@CurrentUser() currentUser: UserDocument, @Param('id', new MongoId()) id: string) {
        return await this.planningService.reveal(id, currentUser._id)
     }
 
@@ -61,7 +62,7 @@ export class PlanningController {
     @ApiCreatedResponse({description: 'The planning has been successfully created.', type: ViewPlanningDto})
     @ApiForbiddenResponse({description: 'Only users can create a planning.'})
     @ApiBadRequestResponse({description: 'Invalid payload'})
-    async create(@CurrentUser() currentUser: any, @Body() body: CreatePlanningDto) {
+    async create(@CurrentUser() currentUser: UserDocument, @Body() body: CreatePlanningDto) {
         body.userId = currentUser._id
         return await this.planningService.create(body, true)
     }

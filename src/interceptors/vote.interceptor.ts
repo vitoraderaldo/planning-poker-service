@@ -1,6 +1,7 @@
 import { CallHandler, ExecutionContext, NestInterceptor } from "@nestjs/common";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
+import { PlanningDocument } from "src/planning/schemas/planning.schema";
 
 export class VoteInterceptor implements NestInterceptor {
 
@@ -11,10 +12,10 @@ export class VoteInterceptor implements NestInterceptor {
 
         // Run something before the response is sent out (outgoing)
         return handler.handle().pipe(
-            map((planning: any) => {
+            map((planning: PlanningDocument) => {
                 if (!planning.revealed) {
                     for (let i = 0; i < planning.voters.length; i++) {
-                        if (planning.voters[i].user._id.toString() != userId.toString()) {
+                        if (planning.voters[i].user['_id'].toString() != userId.toString()) {
                             planning.voters[i].value = null
                         }
                     }

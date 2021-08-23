@@ -23,11 +23,11 @@ export class PlanningRepository {
         return this.planningModel.findById(id)
     }
 
-    save(planning: any) {
+    save(planning: PlanningDocument) {
         return planning.save()
     }
 
-    populate(planning: any) {
+    populate(planning: PlanningDocument) {
         return planning.populate('createdBy voters.user').execPopulate()
     }
 }

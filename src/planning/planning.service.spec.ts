@@ -5,6 +5,7 @@ import { PlanningRepository } from './repositories/planning.repository';
 import { Types } from 'mongoose';
 import { VoterDto } from './dto/voter.dto';
 import { BadRequestException, ForbiddenException } from '@nestjs/common';
+import { PlanningDocument } from './schemas/planning.schema';
 
 const Mock = jest.fn
 
@@ -12,7 +13,7 @@ describe('PlanningService', () => {
   let service: PlanningService;
   let planningRepository: Partial<PlanningRepository>
 
-  let savedPlanning: any
+  let savedPlanning: Partial<PlanningDocument>
   const MAX_VOTERS: number = 20
 
   beforeEach(async () => {
@@ -33,15 +34,15 @@ describe('PlanningService', () => {
           createdBy: planningDto.userId,
           revealed: false,
           voters: []
-        } as any
+        } as PlanningDocument
       }),
-      get: Mock((id: string) => savedPlanning),
-      save: Mock((planning: any) => {
-        planning.createdAt = new Date()
-        planning.updatedAt = new Date()
-        return planning
+      get: Mock((id: string) => Promise.resolve(savedPlanning as PlanningDocument)),
+      save: Mock((planning: PlanningDocument) => {
+        planning['createdAt'] = new Date()
+        planning['updatedAt'] = new Date()
+        return Promise.resolve(planning)
       }),
-      populate: Mock((planning: any) => planning)
+      populate: Mock((planning: PlanningDocument) => Promise.resolve(planning))
     }
 
     const module: TestingModule = await Test.createTestingModule({

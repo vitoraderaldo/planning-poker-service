@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserRepository } from './repositories/user.repository';
+import { UserDocument } from './schemas/user.schema';
 import { UserService } from './user.service';
 
 describe('UserService', () => {
@@ -11,7 +12,7 @@ describe('UserService', () => {
 
     userRepository = {
       create: (userDto: CreateUserDto) => null,
-      save: () => {},
+      save: (user: UserDocument) => Promise.resolve(null as UserDocument),
       get: (id: string) => null
     }
 

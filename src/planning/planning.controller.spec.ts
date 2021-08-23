@@ -20,7 +20,7 @@ describe('PlanningController', () => {
   beforeEach(async () => {
 
     planningService = {
-      get: (id: string): any =>  Promise.resolve(savedPlanning),
+      get: (id: string) =>  Promise.resolve(savedPlanning),
       create: async (planningDto: CreatePlanningDto) => Promise.resolve({} as PlanningDocument),
       addVote: async (voterDto: VoterDto) => Promise.resolve({} as PlanningDocument)
     }

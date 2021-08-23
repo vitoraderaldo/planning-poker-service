@@ -1,6 +1,6 @@
 import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreatePlanningDto } from './dto/create-planning.dto';
-import { PlanningDocument } from './schemas/planning.schema';
+import { PlanningDocument, Voter } from './schemas/planning.schema';
 import { VoterDto } from './dto/voter.dto';
 import { PlanningRepository } from './repositories/planning.repository';
 
@@ -25,7 +25,7 @@ export class PlanningService {
         let data = this.planningRepository.create(planningDto)
         let planning = await this.planningRepository.save(data)
         if (populate) {
-            planning = this.planningRepository.populate(planning)
+            planning = await this.planningRepository.populate(planning)
         }
         return planning
     }
@@ -79,7 +79,7 @@ export class PlanningService {
         planning.voters.push({
             user: voterDto.userId,
             value: voterDto.value
-        } as any)
+        } as Voter)
 
         return planning
     }

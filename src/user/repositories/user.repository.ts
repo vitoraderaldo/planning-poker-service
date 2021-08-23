@@ -21,7 +21,7 @@ export class UserRepository {
         return this.userModel.findById(id)
     }
 
-    save(user: any) {
+    save(user: UserDocument) {
         return user.save()
     }
 }
